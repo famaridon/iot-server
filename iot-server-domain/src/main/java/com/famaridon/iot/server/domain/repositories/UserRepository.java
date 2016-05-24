@@ -3,8 +3,8 @@ package com.famaridon.iot.server.domain.repositories;
 import com.famaridon.iot.server.domain.entities.User;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  * Created by famaridon on 23/05/2016.
@@ -12,7 +12,7 @@ import javax.persistence.EntityManager;
 @ApplicationScoped
 public class UserRepository
 {
-	@Inject
+	@PersistenceContext
 	private EntityManager em;
 
 	public User findById(Long id) {
