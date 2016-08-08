@@ -14,7 +14,9 @@
             </list>
           </option>
           <option name="profilesMap">
-            <map />
+            <map>
+              <entry key="start-wildfly" value="true" />
+            </map>
           </option>
           <option name="resolveToWorkspace" value="false" />
           <option name="workingDirPath" value="$PROJECT_DIR$" />
@@ -24,6 +26,8 @@
     <RunnerSettings RunnerId="JProfiler">
       <option name="WINDOW" value="false" />
     </RunnerSettings>
-    <method />
+    <method>
+      <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="package" />
+    </method>
   </configuration>
 </component>

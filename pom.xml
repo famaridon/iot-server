@@ -27,12 +27,16 @@
 		<war-plugin-version>2.4</war-plugin-version>
 		<ear-plugin-version>2.9</ear-plugin-version>
 		<jar-plugin-version>3.0.2</jar-plugin-version>
+		<jar-plugin-version>3.0.2</jar-plugin-version>
+		<dependency-plugin-version>2.10</dependency-plugin-version>
 		<wildfly-plugin-version>1.1.0.Alpha8</wildfly-plugin-version>
-		<wildfly-swarm-plugin-version>1.0.0.Beta8</wildfly-swarm-plugin-version>
 		<compiler-plugin-version>3.1</compiler-plugin-version>
 
 		<!-- dependency versions -->
 		<javaee-api-version>7.0</javaee-api-version>
+
+		<!-- WildFly modules -->
+		<mysql-connector-java-version>5.1.39</mysql-connector-java-version>
 
 		<!-- EJB spec version -->
 		<ejb-spec-version>3.2</ejb-spec-version>
@@ -59,7 +63,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.39</version>
+			<version>${mysql-connector-java-version}</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
@@ -99,6 +103,11 @@
 					<artifactId>maven-ejb-plugin</artifactId>
 					<version>${ejb-plugin-version}</version>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>${dependency-plugin-version}</version>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -109,32 +118,6 @@
 				<version>${ejb-plugin-version}</version>
 				<configuration>
 					<ejbVersion>${ejb-spec-version}</ejbVersion>
-				</configuration>
-			</plugin>
-
-			<!-- war plugin -skinny wars mode! -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>${war-plugin-version}</version>
-				<configuration>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
-					<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
-					<archive>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<classpathPrefix>lib/</classpathPrefix>
-						</manifest>
-					</archive>
-					<webResources>
-						<resource>
-							<filtering>true</filtering>
-							<directory>src/main/webapp</directory>
-							<includes>
-								<include>**/web.xml</include>
-							</includes>
-						</resource>
-					</webResources>
 				</configuration>
 			</plugin>
 
@@ -150,21 +133,63 @@
 					<env>
 						<JBOSS_HOME>${project.basedir}/iot-server-ear/target/wildfly-run/</JBOSS_HOME>
 					</env>
-					<beforeDeployment>
-						<commands>
-							<command>module add --name=org.mysql --resources=./target/dependency/mysql-connector-java-5.1.39.jar --dependencies=javax.api,javax.transaction.api</command>
-							<command>/subsystem=datasources/jdbc-driver=mysql:add(driver-module-name=org.mysql,driver-name=mysql,driver-class-name=com.mysql.jdbc.Driver)</command>
-							<command>data-source add --jndi-name=java:jboss/datasources/IoTServer --name=IoTServer --connection-url=jdbc:mysql://localhost:3306/iotserver?autoReconnect=true&amp;useSSL=false --driver-name=mysql --user-name=root --password=manager</command>
-						</commands>
-					</beforeDeployment>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.10</version>
-			</plugin>
 		</plugins>
+
 	</build>
+
+	<profiles>
+		<profile>
+			<id>start-wildfly</id>
+			<build>
+				<plugins>
+					<!-- WildFly plug-in to deploy the WAR -->
+					<plugin>
+						<groupId>org.wildfly.plugins</groupId>
+						<artifactId>wildfly-maven-plugin</artifactId>
+						<version>${wildfly-plugin-version}</version>
+						<inherited>false</inherited>
+						<configuration>
+							<targetDir>./iot-server-ear/target</targetDir>
+							<filename>iot-server-ear.ear</filename>
+							<address>127.0.0.1</address>
+							<env>
+								<JBOSS_HOME>${project.basedir}/iot-server-ear/target/wildfly-run/</JBOSS_HOME>
+							</env>
+							<beforeDeployment>
+								<commands>
+									<!-- install mysql jdbc driver -->
+									<command>module add --name=org.mysql --resources=${settings.localRepository}/mysql/mysql-connector-java/${mysql-connector-java-version}/mysql-connector-java-${mysql-connector-java-version}.jar --dependencies=javax.api,javax.transaction.api</command>
+									<command>/subsystem=datasources/jdbc-driver=mysql:add(driver-module-name=org.mysql,driver-name=mysql,driver-class-name=com.mysql.jdbc.Driver)</command>
+									<!-- create the datasource -->
+									<command>data-source add --jndi-name=java:jboss/datasources/IoTServer --name=IoTServer --connection-url=jdbc:mysql://localhost:3306/iotserver?autoReconnect=true&amp;useSSL=false --driver-name=mysql --user-name=root --password=manager</command>
+									<!-- set undertow to recompile jsp  -->
+									<command>/subsystem=undertow/servlet-container=default/setting=jsp:write-attribute(name=development,value=true)</command>
+									<command>/subsystem=undertow/servlet-container=default/setting=jsp:write-attribute(name=recompile-on-fail,value=true)</command>
+									<command>/subsystem=undertow/servlet-container=default/setting=jsp:write-attribute(name=check-interval,value=1)</command>
+									<command>/subsystem=undertow/servlet-container=default/setting=jsp:write-attribute(name=modification-test-interval,value=1)</command>
+
+									<command>:reload</command>
+								</commands>
+							</beforeDeployment>
+							<add-user>
+								<users>
+									<user>
+										<username>sysadmin</username>
+										<password>manager</password>
+										<groups>
+											<group>admin</group>
+											<group>user</group>
+										</groups>
+									</user>
+								</users>
+							</add-user>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>
