@@ -20,16 +20,10 @@ public class StarterMain
 		 */
 		swarm.fraction(new DatasourcesFraction().jdbcDriver("mysql", (d) ->
 		{
-			d.driverClassName("com.mysql.jdbc.Driver");
-			d.xaDatasourceClass("com.mysql.jdbc.jdbc2.optional.MysqlXADataSource");
-			d.driverModuleName("com.mysql");
+			d.driverModuleName("com.mysql").driverName("mysql").driverClassName("com.mysql.jdbc.Driver");
 		}).dataSource("IoTServer", (ds) ->
 		{
-			ds.jndiName("java:jboss/datasources/IoTServer");
-			ds.driverName("mysql");
-			ds.connectionUrl("jdbc:mysql://localhost:3306/iotserver");
-			ds.userName("root");
-			ds.password("manager");
+			ds.jndiName("java:jboss/datasources/IoTServer").connectionUrl("jdbc:mysql://localhost:3306/iotserver?autoReconnect=true&amp;useSSL=false").driverName("mysql").userName("root").password("manager");
 		}));
 		
 		/**

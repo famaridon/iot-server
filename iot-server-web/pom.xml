@@ -11,6 +11,11 @@
 	<artifactId>iot-server-web</artifactId>
 	<packaging>war</packaging>
 
+	<properties>
+		<!-- WildFly modules -->
+		<mysql-connector-java-version>5.1.39</mysql-connector-java-version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>javax</groupId>
@@ -68,9 +73,24 @@
 			<artifactId>jpa</artifactId>
 		</dependency>
 
+		<!-- swarm modules -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql-connector-java-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+
 		<plugins>
 			<!-- war plugin -skinny wars mode! -->
 			<plugin>
@@ -100,16 +120,9 @@
 				<groupId>org.wildfly.swarm</groupId>
 				<artifactId>wildfly-swarm-plugin</artifactId>
 				<version>${version.wildfly.swarm}</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>package</goal>
-						</goals>
-						<configuration>
-							<mainClass></mainClass>
-						</configuration>
-					</execution>
-				</executions>
+				<configuration>
+					<mainClass>com.famaridon.iot.server.StarterMain</mainClass>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

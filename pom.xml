@@ -36,9 +36,6 @@
 		<!-- wildfly swarm -->
 		<version.wildfly.swarm>2016.8.1</version.wildfly.swarm>
 
-		<!-- WildFly modules -->
-		<mysql-connector-java-version>5.1.39</mysql-connector-java-version>
-
 		<!-- EJB spec version -->
 		<ejb-spec-version>3.2</ejb-spec-version>
 		<junit-version>4.12</junit-version>
