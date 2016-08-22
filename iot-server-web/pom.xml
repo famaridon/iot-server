@@ -2,26 +2,26 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xmlns="http://maven.apache.org/POM/4.0.0"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>iot-server</artifactId>
-        <groupId>com.famaridon</groupId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>iot-server-web</artifactId>
-    <packaging>war</packaging>
+	<parent>
+		<artifactId>iot-server</artifactId>
+		<groupId>com.famaridon</groupId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>iot-server-web</artifactId>
+	<packaging>war</packaging>
 
-    <dependencies>
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>iot-server-services</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+	<dependencies>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>iot-server-services</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<!-- Web jars -->
 		<dependency>
@@ -54,9 +54,23 @@
 			<!-- http://127.0.0.1:8080/iot-server-web/webjars/bootstrap/3.1.0/js/bootstrap.js -->
 		</dependency>
 
+		<!-- swarm fraction configuration -->
+		<dependency>
+			<groupId>org.wildfly.swarm</groupId>
+			<artifactId>datasources</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.wildfly.swarm</groupId>
+			<artifactId>ejb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.wildfly.swarm</groupId>
+			<artifactId>jpa</artifactId>
+		</dependency>
+
 	</dependencies>
 
-    <build>
+	<build>
 		<plugins>
 			<!-- war plugin -skinny wars mode! -->
 			<plugin>
@@ -91,10 +105,13 @@
 						<goals>
 							<goal>package</goal>
 						</goals>
+						<configuration>
+							<mainClass></mainClass>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
-    </build>
+	</build>
 
 </project>
