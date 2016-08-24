@@ -2,7 +2,6 @@ package com.famaridon.iot.server;
 
 import org.wildfly.swarm.Swarm;
 import org.wildfly.swarm.cdi.CDIFraction;
-import org.wildfly.swarm.datasources.DatasourcesFraction;
 import org.wildfly.swarm.ejb.EJBFraction;
 import org.wildfly.swarm.jaxrs.JAXRSFraction;
 import org.wildfly.swarm.jpa.JPAFraction;
@@ -21,6 +20,7 @@ public class StarterMain
 		/**
 		 * build the datasource
 		 */
+		 /*
 		swarm.fraction(new DatasourcesFraction().jdbcDriver("mysql", (d) ->
 		{
 			d.driverModuleName("com.mysql").driverName("mysql").driverClassName("com.mysql.jdbc.Driver");
@@ -28,6 +28,7 @@ public class StarterMain
 		{
 			ds.jndiName("java:jboss/datasources/IoTServer").connectionUrl("jdbc:mysql://localhost:3306/iotserver?autoReconnect=true&amp;useSSL=false").driverName("mysql").userName("root").password("manager");
 		}));
+		*/
 		
 		/**
 		 * enable factions
