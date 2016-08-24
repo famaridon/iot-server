@@ -1,6 +1,10 @@
 package com.famaridon.iot.server.rest.v1;
 
+import com.famaridon.iot.server.domain.repositories.UserRepository;
+
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -14,8 +18,8 @@ import javax.ws.rs.core.Response;
 public class UserRestController
 {
 	
-	// @EJB
-	// UserRepository repository;
+	@Inject
+	UserRepository repository;
 	
 	@GET
 	@Produces("text/plain")

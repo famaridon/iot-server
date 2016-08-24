@@ -30,6 +30,7 @@
 
 		<!-- wildfly swarm -->
 		<version.wildfly.swarm>2016.8.1</version.wildfly.swarm>
+		<deltaspike.version>1.7.1</deltaspike.version>
 
 		<!-- WildFly modules -->
 		<mysql-connector-java-version>5.1.39</mysql-connector-java-version>
@@ -49,6 +50,13 @@
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.deltaspike.distribution</groupId>
+				<artifactId>distributions-bom</artifactId>
+				<version>${deltaspike.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -61,6 +69,23 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- deltaspike -->
+		<dependency>
+			<groupId>org.apache.deltaspike.core</groupId>
+			<artifactId>deltaspike-core-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.deltaspike.core</groupId>
+			<artifactId>deltaspike-core-impl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.deltaspike.modules</groupId>
+			<artifactId>deltaspike-data-module-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.deltaspike.modules</groupId>
+			<artifactId>deltaspike-data-module-impl</artifactId>
+		</dependency>
 
 		<!-- swarm fraction configuration -->
 		<dependency>
@@ -89,6 +114,10 @@
 		</dependency>
 		<dependency>
 			<groupId>org.wildfly.swarm</groupId>
+			<artifactId>logging</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.wildfly.swarm</groupId>
 			<artifactId>swagger</artifactId>
 			<version>${version.wildfly.swarm}</version>
 		</dependency>
@@ -106,36 +135,6 @@
 			<version>${mysql-connector-java-version}</version>
 		</dependency>
 
-		<!-- Web jars -->
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>webjars-locator</artifactId>
-			<version>0.32</version>
-		</dependency>
-		<!-- get a nice taglib for webjars locator -->
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>webjars-taglib</artifactId>
-			<version>0.3</version>
-		</dependency>
-		<!-- enable webjars with jboss vfs -->
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>webjars-locator-jboss-vfs</artifactId>
-			<version>0.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.webjars.npm</groupId>
-			<artifactId>chart.js</artifactId>
-			<version>2.1.6</version>
-			<!-- http://127.0.0.1:8080/iot-server-web/webjars/chart.js/2.1.6/dist/Chart.js -->
-		</dependency>
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>bootstrap</artifactId>
-			<version>3.3.7</version>
-			<!-- http://127.0.0.1:8080/iot-server-web/webjars/bootstrap/3.1.0/js/bootstrap.js -->
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -176,6 +175,11 @@
 				<version>${war-plugin-version}</version>
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+						</manifest>
+					</archive>
 				</configuration>
 			</plugin>
 
@@ -186,6 +190,20 @@
 				<configuration>
 					<mainClass>com.famaridon.iot.server.StarterMain</mainClass>
 				</configuration>
+				<executions>
+					<execution>
+						<id>package</id>
+						<goals>
+							<goal>package</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>start</id>
+					</execution>
+					<execution>
+						<id>stop</id>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
