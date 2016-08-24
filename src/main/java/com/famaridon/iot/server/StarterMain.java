@@ -35,25 +35,6 @@ public class StarterMain
 		swarm.fraction(new JAXRSFraction().applyDefaults());
 		
 		swarm.start();
-		/*
-		WARArchive deployment = ShrinkWrap.create(WARArchive.class);
-		deployment.addPackage("com.famaridon.iot.server.rest.v1");
-		deployment.addAsWebInfResource(new ClassLoaderAsset("META-INF/persistence.xml", StarterMain.class.getClassLoader()), "classes/META-INF/persistence.xml");
-		// deployment.addAsWebInfResource(new ClassLoaderAsset("META-INF/load.sql", StarterMain.class.getClassLoader()), "classes/META-INF/load.sql");
-		deployment.addAllDependencies();
-		
-		swarm.deploy(deployment);
-		*/
-		/**
-		 * enable jax-rs
-		 */
-		 /*
-		JAXRSArchive archive = ShrinkWrap.create(JAXRSArchive.class);
-		archive.addPackage(IoTRestApplication.class.getPackage());
-		archive.addAllDependencies();
-		
-		swarm.deploy(archive);
-		*/
 		swarm.deploy(swarm.createDefaultDeployment());
 		 
 	}
