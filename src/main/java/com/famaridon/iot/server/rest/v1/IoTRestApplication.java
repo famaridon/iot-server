@@ -20,6 +20,7 @@ public class IoTRestApplication extends Application
 	{
 		Set<Class<?>> endpoints = new HashSet<>();
 		endpoints.add(UserRestController.class);
+		endpoints.add(DevicesService.class);
 		return endpoints;
 	}
 	
