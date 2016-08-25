@@ -1,40 +1,88 @@
 package com.famaridon.iot.server.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by famaridon on 23/05/2016.
  */
 @Entity
-public class User
+public class User extends AbstractEntity
 {
-	@Id
-	@GeneratedValue
-	private Long id;
+	@Column(unique = true)
+	private String login;
 	
 	@Column
-	private String login;
-
+	@JsonIgnore
+	private String password;
+	
+	@OneToMany
+	private Set<Device> devices = new HashSet<>();
+	
 	/**
-	 * get {@link User#id} property
+	 * get {@link User#login} property
 	 *
-	 * @return get the id property
+	 * @return get the login property
 	 **/
-	public Long getId()
+	public String getLogin()
 	{
-		return id;
+		return login;
 	}
-
+	
 	/**
-	 * set {@link User#id} property
+	 * set {@link User#login} property
 	 *
-	 * @param id set the id property
+	 * @param login set the login property
 	 **/
-	public void setId(Long id)
+	public void setLogin(String login)
 	{
-		this.id = id;
+		this.login = login;
 	}
+	
+	/**
+	 * get {@link User#devices} property
+	 *
+	 * @return get the devices property
+	 **/
+	public Set<Device> getDevices()
+	{
+		return devices;
+	}
+	
+	/**
+	 * set {@link User#devices} property
+	 *
+	 * @param devices set the devices property
+	 **/
+	public void setDevices(Set<Device> devices)
+	{
+		this.devices = devices;
+	}
+	
+	/**
+	 * get {@link User#password} property
+	 *
+	 * @return get the password property
+	 **/
+	public String getPassword()
+	{
+		return password;
+	}
+	
+	/**
+	 * set {@link User#password} property
+	 *
+	 * @param password set the password property
+	 **/
+	public void setPassword(String password)
+	{
+		this.password = password;
+	}
+	
+
 }

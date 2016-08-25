@@ -2,43 +2,44 @@ package com.famaridon.iot.server.domain.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.util.UUID;
 
 /**
  * Created by famaridon on 23/05/2016.
  */
 @Entity
-public class Device
+public class Device extends AbstractEntity
 {
-	@Id
-	private String id;
+	
+	@Column(unique = true)
+	private String uuid;
+	
 	@Column
 	private String name;
 	
 	public Device()
 	{
-		this.id = UUID.randomUUID().toString();
+		this.uuid = UUID.randomUUID().toString();
 	}
 	
 	/**
-	 * get {@link Device#id} property
+	 * get {@link Device#uuid} property
 	 *
-	 * @return get the id property
+	 * @return get the uuid property
 	 **/
-	public String getId()
+	public String getUuid()
 	{
-		return id;
+		return uuid;
 	}
 	
 	/**
-	 * set {@link Device#id} property
+	 * set {@link Device#uuid} property
 	 *
-	 * @param id set the id property
+	 * @param uuid set the uuid property
 	 **/
-	public void setId(String id)
+	public void setUuid(String uuid)
 	{
-		this.id = id;
+		this.uuid = uuid;
 	}
 	
 	/**
@@ -59,31 +60,6 @@ public class Device
 	public void setName(String name)
 	{
 		this.name = name;
-	}
-	
-	@Override
-	public int hashCode()
-	{
-		return id.hashCode();
-	}
-	
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj)
-		{
-			return true;
-		}
-		if (obj == null)
-		{
-			return false;
-		}
-		if (!(obj instanceof Device))
-		{
-			return false;
-		}
-		Device other = (Device)obj;
-		return getId().equals(other.getId());
 	}
 	
 }
