@@ -26,9 +26,6 @@
 
 		<!-- dependency versions -->
 		<javaee-api-version>7.0</javaee-api-version>
-
-		<!-- wildfly swarm -->
-		<version.wildfly.swarm>2016.9-SNAPSHOT</version.wildfly.swarm>
 		<deltaspike.version>1.7.1</deltaspike.version>
 
 		<!-- WildFly modules -->
@@ -36,19 +33,14 @@
 
 		<!-- EJB spec version -->
 		<ejb-spec-version>3.2</ejb-spec-version>
+
+
 		<junit-version>4.12</junit-version>
 	</properties>
 
 
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>org.wildfly.swarm</groupId>
-				<artifactId>bom</artifactId>
-				<version>${version.wildfly.swarm}</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
 			<dependency>
 				<groupId>org.apache.deltaspike.distribution</groupId>
 				<artifactId>distributions-bom</artifactId>
@@ -89,49 +81,6 @@
 			<artifactId>deltaspike-data-module-impl</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-
-		<!-- swarm fraction configuration -->
-		<!--
-		<dependency>
-			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>datasources</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>cdi</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>jaxrs</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>jaxrs-cdi</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>ejb</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>logging</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>swagger</artifactId>
-			<version>${version.wildfly.swarm}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.wildfly.swarm.servers</groupId>
-			<artifactId>swagger-ui</artifactId>
-			<version>${version.wildfly.swarm}</version>
-			<classifier>swarm</classifier>
-		</dependency>
-		-->
 
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
@@ -179,18 +128,6 @@
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>${jar-plugin-version}</version>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>${dependency-plugin-version}</version>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>${war-plugin-version}</version>
 				<configuration>
@@ -221,13 +158,6 @@
 					<password>manager</password>
 				</configuration>
 				<executions>
-					<!--<execution>-->
-					<!--<id>default-redeploy</id>-->
-					<!--<goals>-->
-					<!--<goal>redeploy</goal>-->
-					<!--</goals>-->
-					<!--<phase>package</phase>-->
-					<!--</execution>-->
 					<execution>
 						<id>default-cli</id>
 						<goals>
@@ -270,58 +200,8 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!--
-						<plugin>
-							<groupId>org.wildfly.swarm</groupId>
-							<artifactId>wildfly-swarm-plugin</artifactId>
-							<version>${version.wildfly.swarm}</version>
-							<configuration>
-								<mainClass>com.famaridon.iot.server.StarterMain</mainClass>
-							</configuration>
-							<executions>
-								<execution>
-									<id>package</id>
-									<goals>
-										<goal>package</goal>
-									</goals>
-								</execution>
-								<execution>
-									<id>start</id>
-								</execution>
-								<execution>
-									<id>stop</id>
-								</execution>
-							</executions>
-						</plugin>
-			-->
+
 		</plugins>
 	</build>
-	<!--
-		<repositories>
-			<repository>
-				<id>projectodd-snapshots</id>
-				<name>Project:odd Snapshots from CI</name>
-				<url>https://repository-projectodd.forge.cloudbees.com/snapshot</url>
-				<releases>
-					<enabled>false</enabled>
-				</releases>
-				<snapshots>
-					<enabled>true</enabled>
-				</snapshots>
-			</repository>
-		</repositories>
-		<pluginRepositories>
-			<pluginRepository>
-				<id>projectodd-snapshots</id>
-				<name>Project:odd Snapshots from CI</name>
-				<url>https://repository-projectodd.forge.cloudbees.com/snapshot</url>
-				<releases>
-					<enabled>false</enabled>
-				</releases>
-				<snapshots>
-					<enabled>true</enabled>
-				</snapshots>
-			</pluginRepository>
-		</pluginRepositories>
-	-->
+
 </project>
