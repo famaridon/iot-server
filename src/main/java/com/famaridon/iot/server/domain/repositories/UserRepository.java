@@ -1,26 +1,14 @@
 package com.famaridon.iot.server.domain.repositories;
 
 import com.famaridon.iot.server.domain.entities.User;
-
-import javax.ejb.Singleton;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import org.apache.deltaspike.data.api.EntityRepository;
+import org.apache.deltaspike.data.api.Repository;
 
 /**
  * Created by famaridon on 23/05/2016.
  */
-@Singleton
-public class UserRepository
+@Repository
+public interface UserRepository extends EntityRepository<User, Long>
 {
-	@PersistenceContext
-	private EntityManager em;
-
-	public User findById(Long id) {
-		return em.find(User.class, id);
-	}
-
-	public User save(User user) {
-		return em.merge(user);
-	}
-
+	public User findByLogin(String login);
 }
