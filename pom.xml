@@ -26,7 +26,8 @@
 
 		<!-- dependency versions -->
 		<javaee-api-version>7.0</javaee-api-version>
-		<deltaspike.version>1.7.1</deltaspike.version>
+		<deltaspike-version>1.7.1</deltaspike-version>
+		<mapstruct-version>1.0.0.Final</mapstruct-version>
 
 		<!-- WildFly modules -->
 		<mysql-connector-java-version>5.1.39</mysql-connector-java-version>
@@ -44,7 +45,7 @@
 			<dependency>
 				<groupId>org.apache.deltaspike.distribution</groupId>
 				<artifactId>distributions-bom</artifactId>
-				<version>${deltaspike.version}</version>
+				<version>${deltaspike-version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -82,6 +83,14 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- mapstruct -->
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-jdk8</artifactId>
+			<version>${mapstruct-version}</version>
+		</dependency>
+
+		<!-- Jax-RS (used for configuration)-->
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jackson2-provider</artifactId>
@@ -113,6 +122,7 @@
 				<filtering>true</filtering>
 			</resource>
 		</resources>
+
 		<plugins>
 			<!-- compiler plugin -->
 			<plugin>
@@ -124,6 +134,40 @@
 					<target>${java-version}</target>
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.bsc.maven</groupId>
+				<artifactId>maven-processor-plugin</artifactId>
+				<version>2.2.4</version>
+				<configuration>
+					<defaultOutputDirectory>
+						${project.build.directory}/generated-sources
+					</defaultOutputDirectory>
+					<processors>
+						<processor>org.mapstruct.ap.MappingProcessor</processor>
+					</processors>
+					<options>
+						<!-- cdi: the generated mapper is an application-scoped CDI bean and can be retrieved via @Inject -->
+						<mapstruct.defaultComponentModel>cdi</mapstruct.defaultComponentModel>
+					</options>
+				</configuration>
+				<executions>
+					<execution>
+						<id>process</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>process</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.mapstruct</groupId>
+						<artifactId>mapstruct-processor</artifactId>
+						<version>${mapstruct-version}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 
 			<plugin>
@@ -157,51 +201,98 @@
 					<username>sysadmin</username>
 					<password>manager</password>
 				</configuration>
-				<executions>
-					<execution>
-						<id>default-cli</id>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<java-opts>
-								<java-opt>-XXaltjvm=dcevm</java-opt>
-								<java-opt>-agentlib:jdwp=transport=dt_shmem,server=y,suspend=n,address=javadebug</java-opt>
-							</java-opts>
-							<beforeDeployment>
-								<commands>
-									<!-- install mysql jdbc driver -->
-									<command>module add --name=org.mysql --resources=${settings.localRepository}/mysql/mysql-connector-java/${mysql-connector-java-version}/mysql-connector-java-${mysql-connector-java-version}.jar --dependencies=javax.api,javax.transaction.api</command>
-									<command>/subsystem=datasources/jdbc-driver=mysql:add(driver-module-name=org.mysql,driver-name=mysql,driver-class-name=com.mysql.jdbc.Driver)</command>
-									<!-- create the datasource -->
-									<command>data-source add --jndi-name=java:jboss/datasources/IoTServer --name=IoTServer --connection-url=jdbc:mysql://localhost:3306/iotserver?autoReconnect=true&amp;useSSL=false --driver-name=mysql --user-name=root --password=manager</command>
-									<!--<command>xa-data-source add &#45;&#45;name=IoTServerXA &#45;&#45;jndi-name="java:jboss/datasources/IoTServerXA" &#45;&#45;driver-name=mysql &#45;&#45;xa-datasource-class=com.mysql.jdbc.jdbc2.optional.MysqlXADataSource &#45;&#45;user-name=root &#45;&#45;password=manager &#45;&#45;xa-datasource-properties=[{ServerName=localhost, DatabaseName=mysqldb}]</command>-->
-									<!-- set undertow to recompile jsp  -->
-									<command>/subsystem=undertow/servlet-container=default/setting=jsp:write-attribute(name=development,value=true)</command>
-									<command>/subsystem=undertow/servlet-container=default/setting=jsp:write-attribute(name=recompile-on-fail,value=true)</command>
-									<command>/subsystem=undertow/servlet-container=default/setting=jsp:write-attribute(name=check-interval,value=1)</command>
-									<command>/subsystem=undertow/servlet-container=default/setting=jsp:write-attribute(name=modification-test-interval,value=1)</command>
-
-								</commands>
-							</beforeDeployment>
-							<add-user>
-								<users>
-									<user>
-										<username>sysadmin</username>
-										<password>manager</password>
-										<groups>
-											<group>admin</group>
-											<group>user</group>
-										</groups>
-									</user>
-								</users>
-							</add-user>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
-
 		</plugins>
 	</build>
 
+	<profiles>
+		<profile>
+			<id>redeploy</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.wildfly.plugins</groupId>
+						<artifactId>wildfly-maven-plugin</artifactId>
+						<version>${wildfly-plugin-version}</version>
+						<configuration>
+							<targetDir>${project.build.directory}/exploded</targetDir>
+							<address>127.0.0.1</address>
+							<username>sysadmin</username>
+							<password>manager</password>
+						</configuration>
+						<executions>
+							<execution>
+								<id>default-cli</id>
+								<goals>
+									<goal>redeploy</goal>
+								</goals>
+								<configuration>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>run</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.wildfly.plugins</groupId>
+						<artifactId>wildfly-maven-plugin</artifactId>
+						<version>${wildfly-plugin-version}</version>
+						<configuration>
+							<targetDir>${project.build.directory}/exploded</targetDir>
+							<address>127.0.0.1</address>
+							<username>sysadmin</username>
+							<password>manager</password>
+						</configuration>
+						<executions>
+							<execution>
+								<id>default-cli</id>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<java-opts>
+										<java-opt>-XXaltjvm=dcevm</java-opt>
+										<java-opt>-agentlib:jdwp=transport=dt_shmem,server=y,suspend=n,address=javadebug</java-opt>
+									</java-opts>
+									<beforeDeployment>
+										<commands>
+											<!-- install mysql jdbc driver -->
+											<command>module add --name=org.mysql --resources=${settings.localRepository}/mysql/mysql-connector-java/${mysql-connector-java-version}/mysql-connector-java-${mysql-connector-java-version}.jar --dependencies=javax.api,javax.transaction.api</command>
+											<command>/subsystem=datasources/jdbc-driver=mysql:add(driver-module-name=org.mysql,driver-name=mysql,driver-class-name=com.mysql.jdbc.Driver)</command>
+											<!-- create the datasource -->
+											<command>data-source add --jndi-name=java:jboss/datasources/IoTServer --name=IoTServer --connection-url=jdbc:mysql://localhost:3306/iotserver?autoReconnect=true&amp;useSSL=false --driver-name=mysql --user-name=root --password=manager</command>
+											<!--<command>xa-data-source add &#45;&#45;name=IoTServerXA &#45;&#45;jndi-name="java:jboss/datasources/IoTServerXA" &#45;&#45;driver-name=mysql &#45;&#45;xa-datasource-class=com.mysql.jdbc.jdbc2.optional.MysqlXADataSource &#45;&#45;user-name=root &#45;&#45;password=manager &#45;&#45;xa-datasource-properties=[{ServerName=localhost, DatabaseName=mysqldb}]</command>-->
+											<!-- set undertow to recompile jsp  -->
+											<command>/subsystem=undertow/servlet-container=default/setting=jsp:write-attribute(name=development,value=true)</command>
+											<command>/subsystem=undertow/servlet-container=default/setting=jsp:write-attribute(name=recompile-on-fail,value=true)</command>
+											<command>/subsystem=undertow/servlet-container=default/setting=jsp:write-attribute(name=check-interval,value=1)</command>
+											<command>/subsystem=undertow/servlet-container=default/setting=jsp:write-attribute(name=modification-test-interval,value=1)</command>
+
+										</commands>
+									</beforeDeployment>
+									<add-user>
+										<users>
+											<user>
+												<username>sysadmin</username>
+												<password>manager</password>
+												<groups>
+													<group>admin</group>
+													<group>user</group>
+												</groups>
+											</user>
+										</users>
+									</add-user>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
