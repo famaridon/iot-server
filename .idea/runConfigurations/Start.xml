@@ -14,7 +14,9 @@
             </list>
           </option>
           <option name="profilesMap">
-            <map />
+            <map>
+              <entry key="run" value="true" />
+            </map>
           </option>
           <option name="resolveToWorkspace" value="false" />
           <option name="workingDirPath" value="$PROJECT_DIR$" />
