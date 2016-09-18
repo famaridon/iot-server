@@ -7,8 +7,12 @@ import com.famaridon.iot.server.rest.v1.mapper.DtoMapper;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 /**
  * Created by famaridon on 22/08/2016.
@@ -17,6 +21,8 @@ import javax.ws.rs.core.MediaType;
 @Path("/users")
 public class UsersService
 {
+	@Context
+	UriInfo uriInfo;
 	
 	@Inject
 	UserRepository repository;
@@ -28,11 +34,12 @@ public class UsersService
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public UserDto create(User user, @QueryParam("password") String password)
+	@Transactional
+	public Response create(User user, @QueryParam("password") String password)
 	{
 		user.setPassword(password);
 		repository.save(user);
-		return dtoMapper.userToUserDto(user);
+		return Response.created(uriInfo.getAbsolutePathBuilder().path(user.getLogin()).build()).build();
 	}
 	
 	@GET
