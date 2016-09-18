@@ -135,6 +135,14 @@
 			<version>${mysql-connector-java-version}</version>
 		</dependency>
 
+		<!-- slf4j -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.21</version>
+			<scope>provided</scope>
+		</dependency>
+
 		<!-- Unit Test -->
 		<dependency>
 			<groupId>org.jboss.arquillian.junit</groupId>
