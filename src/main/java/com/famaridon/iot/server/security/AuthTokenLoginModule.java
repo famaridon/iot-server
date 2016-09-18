@@ -1,5 +1,7 @@
 package com.famaridon.iot.server.security;
 
+import org.apache.commons.lang3.NotImplementedException;
+
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginException;
@@ -34,7 +36,7 @@ public class AuthTokenLoginModule implements LoginModule
 	@Override
 	public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState, Map<String, ?> options)
 	{
-		throw new NotImplementedException();
+		throw new NotImplementedException("");
 	}
 	
 	/**
@@ -53,7 +55,7 @@ public class AuthTokenLoginModule implements LoginModule
 	@Override
 	public boolean login() throws LoginException
 	{
-		throw new NotImplementedException();
+		throw new NotImplementedException("");
 	}
 	
 	/**
@@ -77,7 +79,7 @@ public class AuthTokenLoginModule implements LoginModule
 	@Override
 	public boolean commit() throws LoginException
 	{
-		throw new NotImplementedException();
+		throw new NotImplementedException("");
 	}
 	
 	/**
@@ -98,7 +100,7 @@ public class AuthTokenLoginModule implements LoginModule
 	@Override
 	public boolean abort() throws LoginException
 	{
-		throw new NotImplementedException();
+		throw new NotImplementedException("");
 	}
 	
 	/**
@@ -113,6 +115,6 @@ public class AuthTokenLoginModule implements LoginModule
 	@Override
 	public boolean logout() throws LoginException
 	{
-		throw new NotImplementedException();
+		throw new NotImplementedException("");
 	}
 }
