@@ -1,6 +1,6 @@
 package com.famaridon.iot.server.domain.repositories;
 
-import com.famaridon.iot.server.domain.entities.Device;
+import com.famaridon.iot.server.domain.entities.Value;
 import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.FirstResult;
 import org.apache.deltaspike.data.api.MaxResults;
@@ -12,7 +12,7 @@ import java.util.List;
  * Created by famaridon on 23/05/2016.
  */
 @Repository
-public interface DevicesRepository extends EntityRepository<Device, Long>
+public interface ValuesRepository extends EntityRepository<Value, String>
 {
-	List<Device> findAll(@FirstResult int start, @MaxResults int pageSize);
+	List<Value> findAll(@FirstResult int start, @MaxResults int pageSize);
 }

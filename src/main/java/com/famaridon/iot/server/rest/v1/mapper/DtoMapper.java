@@ -8,7 +8,8 @@ import org.mapstruct.Mapper;
  * Created by famaridon on 25/08/2016.
  */
 @Mapper
-public interface UserMapper
+public interface DtoMapper
 {
 	UserDto userToUserDto(User user);
+	
 }

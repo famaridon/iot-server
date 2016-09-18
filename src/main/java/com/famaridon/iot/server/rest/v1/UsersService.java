@@ -3,7 +3,7 @@ package com.famaridon.iot.server.rest.v1;
 import com.famaridon.iot.server.domain.entities.User;
 import com.famaridon.iot.server.domain.repositories.UserRepository;
 import com.famaridon.iot.server.rest.v1.dto.UserDto;
-import com.famaridon.iot.server.rest.v1.mapper.UserMapper;
+import com.famaridon.iot.server.rest.v1.mapper.DtoMapper;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -22,7 +22,7 @@ public class UsersService
 	UserRepository repository;
 	
 	@Inject
-	UserMapper userMapper;
+	DtoMapper dtoMapper;
 	
 	@POST
 	@Path("/")
@@ -32,7 +32,7 @@ public class UsersService
 	{
 		user.setPassword(password);
 		repository.save(user);
-		return userMapper.userToUserDto(user);
+		return dtoMapper.userToUserDto(user);
 	}
 	
 	@GET
@@ -40,7 +40,7 @@ public class UsersService
 	@Produces(MediaType.APPLICATION_JSON)
 	public UserDto get(@PathParam("login") String login)
 	{
-		return userMapper.userToUserDto(repository.findByLogin(login));
+		return dtoMapper.userToUserDto(repository.findByLogin(login));
 	}
 	
 }

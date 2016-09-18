@@ -3,7 +3,7 @@ package com.famaridon.iot.server.rest.v1.dto;
 /**
  * Created by famaridon on 25/08/2016.
  */
-public class UserDto
+public class UserDto extends AbstractDto
 {
 	private String login;
 	
