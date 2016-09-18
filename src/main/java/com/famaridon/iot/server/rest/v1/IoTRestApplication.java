@@ -11,6 +11,7 @@ import javax.servlet.ServletContext;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.ext.ExceptionMapper;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,6 +38,8 @@ public class IoTRestApplication extends Application
 	public Set<Class<?>> getClasses()
 	{
 		Set<Class<?>> endpoints = new HashSet<>();
+		// exception handling
+		endpoints.add(ExceptionMapper.class);
 		
 		// applications services
 		endpoints.add(UsersService.class);
