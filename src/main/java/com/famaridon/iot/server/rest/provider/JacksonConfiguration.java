@@ -1,8 +1,8 @@
 package com.famaridon.iot.server.rest.provider;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javax.inject.Inject;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.ContextResolver;
@@ -16,18 +16,12 @@ import javax.ws.rs.ext.Provider;
 public class JacksonConfiguration implements ContextResolver<ObjectMapper>
 {
 	
-	private final ObjectMapper mapper;
-	
-	public JacksonConfiguration()
-	{
-		mapper = new ObjectMapper();
-		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-		mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
-	}
+	@Inject
+	ObjectMapper objectMapper;
 	
 	@Override
 	public ObjectMapper getContext(Class<?> type)
 	{
-		return mapper;
+		return objectMapper;
 	}
 }

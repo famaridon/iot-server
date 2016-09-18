@@ -1,6 +1,7 @@
 package com.famaridon.iot.server.rest.v1;
 
 import com.famaridon.iot.server.interceptors.binding.Logged;
+import com.famaridon.iot.server.rest.provider.ExceptionMapper;
 import com.famaridon.iot.server.rest.provider.JacksonConfiguration;
 import io.swagger.models.Contact;
 import io.swagger.models.ExternalDocs;
@@ -37,6 +38,8 @@ public class IoTRestApplication extends Application
 	public Set<Class<?>> getClasses()
 	{
 		Set<Class<?>> endpoints = new HashSet<>();
+		// exception handling
+		endpoints.add(ExceptionMapper.class);
 		
 		// applications services
 		endpoints.add(UsersService.class);
