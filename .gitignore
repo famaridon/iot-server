@@ -2,9 +2,7 @@
 *.iml
 
 ## Directory-based project format:
-!.idea/
-.idea/*
-!.idea/runConfigurations
+.idea
 
 ## Maven
 target/

@@ -13,10 +13,11 @@ import javax.ws.rs.core.Response;
  * Created by famaridon on 22/08/2016.
  */
 @Stateless
-@Path("/devices")
+@Path("/devices/{" + DevicesService.USER_API_KEY_PATH_PARAM + "}")
 public class DevicesService
 {
 	
+	public static final String USER_API_KEY_PATH_PARAM = "user-api-key";
 	@Inject
 	DevicesRepository repository;
 	
