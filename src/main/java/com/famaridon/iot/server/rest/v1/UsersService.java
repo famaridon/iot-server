@@ -4,6 +4,8 @@ import com.famaridon.iot.server.domain.entities.User;
 import com.famaridon.iot.server.domain.repositories.UserRepository;
 import com.famaridon.iot.server.rest.v1.dto.UserDto;
 import com.famaridon.iot.server.rest.v1.mapper.DtoMapper;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -19,6 +21,7 @@ import javax.ws.rs.core.UriInfo;
  */
 @Stateless
 @Path("/users")
+@Api("/users")
 public class UsersService
 {
 	@Context
@@ -32,6 +35,7 @@ public class UsersService
 	
 	@POST
 	@Path("/")
+	@ApiOperation("Create a new user")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
@@ -44,6 +48,7 @@ public class UsersService
 	
 	@GET
 	@Path("/{login}")
+	@ApiOperation("get a user by it's login")
 	@Produces(MediaType.APPLICATION_JSON)
 	public UserDto get(@PathParam("login") String login)
 	{
