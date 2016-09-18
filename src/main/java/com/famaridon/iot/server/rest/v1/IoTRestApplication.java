@@ -1,6 +1,7 @@
 package com.famaridon.iot.server.rest.v1;
 
 import com.famaridon.iot.server.interceptors.binding.Logged;
+import com.famaridon.iot.server.rest.provider.ExceptionMapper;
 import com.famaridon.iot.server.rest.provider.JacksonConfiguration;
 import io.swagger.models.Contact;
 import io.swagger.models.ExternalDocs;
@@ -11,7 +12,6 @@ import javax.servlet.ServletContext;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.ext.ExceptionMapper;
 import java.util.HashSet;
 import java.util.Set;
 

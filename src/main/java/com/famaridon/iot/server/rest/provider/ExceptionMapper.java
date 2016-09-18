@@ -1,9 +1,13 @@
 package com.famaridon.iot.server.rest.provider;
 
 import com.famaridon.iot.server.rest.exception.HttpStatusCode;
+import com.famaridon.iot.server.rest.provider.beans.ErrorResponseBean;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 
 /**
@@ -12,6 +16,10 @@ import javax.ws.rs.core.Response;
 public class ExceptionMapper implements javax.ws.rs.ext.ExceptionMapper<Exception>
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionMapper.class);
+	
+	@Inject
+	ObjectMapper objectMapper;
+
 	
 	/**
 	 * Map an exception to a {@link Response}. Returning
@@ -26,6 +34,7 @@ public class ExceptionMapper implements javax.ws.rs.ext.ExceptionMapper<Exceptio
 	public Response toResponse(Exception exception)
 	{
 		Response.Status status;
+		ErrorResponseBean body;
 		
 		if (exception.getClass().isAnnotationPresent(HttpStatusCode.class))
 		{
@@ -33,14 +42,21 @@ public class ExceptionMapper implements javax.ws.rs.ext.ExceptionMapper<Exceptio
 			status = httpStatusCode.value();
 			// this is handled exception simple warn log
 			LOGGER.warn("Client exception : ", exception);
-			return Response.status(Response.Status.BAD_REQUEST).entity(exception.getMessage()).build();
+			body = new ErrorResponseBean().setMessage(exception.getMessage());
 		}
 		else
 		{
 			status = Response.Status.INTERNAL_SERVER_ERROR;
 			LOGGER.error("Not handled exception : ", exception);
+			body = new ErrorResponseBean().setMessage("Not catch exception!");
 		}
-		
-		return Response.status(status).entity(exception.getMessage()).build();
+		try
+		{
+			return Response.status(status).entity(objectMapper.writeValueAsString(body)).build();
+		}
+		catch (JsonProcessingException e)
+		{
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("{message : 'Can't serialize error message'}").build();
+		}
 	}
 }
