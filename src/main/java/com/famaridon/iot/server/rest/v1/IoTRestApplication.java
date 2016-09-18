@@ -1,11 +1,11 @@
 package com.famaridon.iot.server.rest.v1;
 
+import com.famaridon.iot.server.interceptors.binding.Logged;
 import com.famaridon.iot.server.rest.provider.JacksonConfiguration;
 import io.swagger.models.Contact;
 import io.swagger.models.ExternalDocs;
 import io.swagger.models.Info;
 import io.swagger.models.Swagger;
-import org.jboss.resteasy.plugins.interceptors.CorsFilter;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.ApplicationPath;
@@ -18,6 +18,7 @@ import java.util.Set;
  * Created by famaridon on 22/08/2016.
  */
 @ApplicationPath("/rest/v1")
+@Logged
 public class IoTRestApplication extends Application
 {
 	private Set<Object> singleton;
@@ -50,33 +51,4 @@ public class IoTRestApplication extends Application
 		return endpoints;
 	}
 	
-	/**
-	 * Get a set of root resource, provider and {@link Feature feature} instances.
-	 * Fields and properties of returned instances are injected with their declared
-	 * dependencies (see {@link Context}) by the runtime prior to use.
-	 * <p>
-	 * Implementations should warn about and ignore classes that do not
-	 * conform to the requirements of root resource or provider classes.
-	 * Implementations should flag an error if the returned set includes
-	 * more than one instance of the same class. Implementations MUST
-	 * NOT modify the returned set.
-	 * </p>
-	 * <p>
-	 * The default implementation returns an empty set.
-	 * </p>
-	 *
-	 * @return a set of root resource and provider instances. Returning {@code null}
-	 * is equivalent to returning an empty set.
-	 */
-	@Override
-	public Set<Object> getSingletons()
-	{
-		if (singleton == null)
-		{
-			singleton = new HashSet<>();
-			CorsFilter filter = new CorsFilter();
-			filter.getAllowedOrigins().add("*");
-		}
-		return singleton;
-	}
 }

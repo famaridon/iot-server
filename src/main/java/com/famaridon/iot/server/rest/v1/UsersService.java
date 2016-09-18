@@ -2,6 +2,7 @@ package com.famaridon.iot.server.rest.v1;
 
 import com.famaridon.iot.server.domain.entities.User;
 import com.famaridon.iot.server.domain.repositories.UserRepository;
+import com.famaridon.iot.server.interceptors.binding.Logged;
 import com.famaridon.iot.server.rest.v1.dto.UserDto;
 import com.famaridon.iot.server.rest.v1.mapper.DtoMapper;
 import io.swagger.annotations.Api;
@@ -22,6 +23,7 @@ import javax.ws.rs.core.UriInfo;
 @Stateless
 @Path("/users")
 @Api("/users")
+@Logged
 public class UsersService
 {
 	@Context

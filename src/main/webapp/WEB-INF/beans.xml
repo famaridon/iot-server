@@ -22,4 +22,7 @@
 	<alternatives>
 		<class>org.apache.deltaspike.jpa.impl.transaction.BeanManagedUserTransactionStrategy</class>
 	</alternatives>
+	<interceptors>
+		<class>com.famaridon.iot.server.interceptors.LoggedInterceptor</class>
+	</interceptors>
 </beans>

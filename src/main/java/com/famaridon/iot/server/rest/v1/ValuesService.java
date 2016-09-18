@@ -1,6 +1,7 @@
 package com.famaridon.iot.server.rest.v1;
 
 import com.famaridon.iot.server.domain.repositories.DevicesRepository;
+import com.famaridon.iot.server.interceptors.binding.Logged;
 import org.apache.commons.lang3.NotImplementedException;
 
 import javax.ejb.Stateless;
@@ -12,6 +13,7 @@ import javax.ws.rs.core.MediaType;
  * Created by famaridon on 22/08/2016.
  */
 @Stateless
+@Logged
 @Path("/devices/{" + DevicesService.USER_API_KEY_PATH_PARAM + "}/values")
 public class ValuesService
 {
