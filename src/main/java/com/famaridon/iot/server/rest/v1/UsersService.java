@@ -4,8 +4,8 @@ import com.famaridon.iot.server.domain.entities.User;
 import com.famaridon.iot.server.domain.repositories.UserRepository;
 import com.famaridon.iot.server.rest.v1.dto.UserDto;
 import com.famaridon.iot.server.rest.v1.mapper.DtoMapper;
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

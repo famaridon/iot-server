@@ -1,11 +1,16 @@
 package com.famaridon.iot.server.rest.v1;
 
 import com.famaridon.iot.server.rest.provider.JacksonConfiguration;
-import com.wordnik.swagger.jaxrs.config.BeanConfig;
+import io.swagger.models.Contact;
+import io.swagger.models.ExternalDocs;
+import io.swagger.models.Info;
+import io.swagger.models.Swagger;
 import org.jboss.resteasy.plugins.interceptors.CorsFilter;
 
+import javax.servlet.ServletContext;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Context;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,13 +22,14 @@ public class IoTRestApplication extends Application
 {
 	private Set<Object> singleton;
 	
-	public IoTRestApplication()
+	public IoTRestApplication(@Context ServletContext servletContext)
 	{
-		BeanConfig beanConfig = new BeanConfig();
-		beanConfig.setVersion("1.0");
-		beanConfig.setBasePath("http://localhost:8080/rest/v1");
-		beanConfig.setResourcePackage("com.famaridon.iot.server.rest.v1");
-		beanConfig.setScan(true);
+		Info info = new Info().title("IoT server API").description("This is the IoT server API doc").contact(new Contact().email("famaridon@gmail.com"));
+		
+		Swagger swagger = new Swagger().info(info);
+		swagger.externalDocs(new ExternalDocs("Find out more about Swagger", "http://swagger.io"));
+		
+		servletContext.setAttribute("swagger", swagger);
 	}
 	
 	@Override
@@ -37,10 +43,9 @@ public class IoTRestApplication extends Application
 		endpoints.add(JacksonConfiguration.class);
 		
 		// swagger
-		endpoints.add(com.wordnik.swagger.jaxrs.listing.ApiListingResource.class);
-		endpoints.add(com.wordnik.swagger.jaxrs.listing.ApiDeclarationProvider.class);
-		endpoints.add(com.wordnik.swagger.jaxrs.listing.ApiListingResourceJSON.class);
-		endpoints.add(com.wordnik.swagger.jaxrs.listing.ResourceListingProvider.class);
+		endpoints.add(io.swagger.jaxrs.listing.SwaggerSerializers.class);
+		endpoints.add(io.swagger.jaxrs.listing.ApiListingResource.class);
+		endpoints.add(io.swagger.jaxrs.listing.AcceptHeaderApiListingResource.class);
 		
 		return endpoints;
 	}
